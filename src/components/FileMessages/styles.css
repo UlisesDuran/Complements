@@ -1,0 +1,33 @@
+.nav-bar {
+  background-color: aliceblue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  width: 500px;
+  padding: 20px;
+
+  .carbot {
+    display: inline-block;
+    font-size: 50px;
+    color: #78ada1;
+    border: solid black;
+  }
+
+  input[type="file"] {
+    margin: 20px 0;
+  }
+
+  button {
+    background-color: #3498db;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #2980b9;
+  }
+}
