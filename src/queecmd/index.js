@@ -4,7 +4,7 @@ const path = require("path");
 
 // Configuración de MongoDB
 const mongoURI =
-  "mongodb://root:M0n90C4rt3rb2o21@localhost:27017/tower-auth?retryWrites=true&loadBalanced=false&serverSelectionTimeoutMS=5000&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-256";
+  "mongodb://root:M0n90C4rt3rb2o21@app.mobility-assistance.com:27017/tower-auth?retryWrites=true&loadBalanced=false&serverSelectionTimeoutMS=5000&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-256";
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -42,8 +42,10 @@ const updateUsers = async () => {
   for (const row of data) {
     const { user_uuid, user_telefono2, user_email1, thumbnail } = row;
 
-    // Buscar el usuario por user_uuid
-    const user = await User.findOne({ "source.id": user_uuid });
+    const user = await User.findOne({
+      "source.id": user_uuid,
+      active: true,
+    });
 
     if (user) {
       const emailExists = await User.findOne({
@@ -56,15 +58,13 @@ const updateUsers = async () => {
           `El email ${user_email1} ya está en uso por otro usuario. Actualizando otros datos.`
         );
       } else {
-        // Actualizar el email si no está en uso por otro usuario
         user.email = user_email1;
       }
-      // Actualizar los campos
+
       if (!user.workphone) user.workphone = user_telefono2;
       user.image = thumbnail;
       user.imagethumb = thumbnail;
 
-      // Guardar los cambios
       await user.save();
       console.log(`Usuario ${user_uuid} actualizado.`);
     } else {
